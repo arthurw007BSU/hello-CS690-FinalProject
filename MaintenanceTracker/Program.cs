@@ -4,6 +4,80 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        bool exit = false;
+        while (!exit){
+            Console.Clear();
+            Console.WriteLine("=== Home Maintenance Tracker ===");
+            Console.WriteLine("1. Log a Maintenance Task");
+            Console.WriteLine("2. Mark a Task as Complete");
+            Console.WriteLine("3. View Upcoming Tasks");
+            Console.WriteLine("4. Log an Expense");
+            Console.WriteLine("5. View reports");
+            Console.WriteLine("6. Quit");
+            Console.Write("Select an option (1-6): ");
+
+            string? input = Console.ReadLine();
+
+            switch (input){
+                case "1":
+                    LogTask(); //call the logtask method
+                    break;
+                case "2":
+                    MarkTaskComplete();
+                    break;
+                case "3":
+                    ViewUpcomingTasks();
+                    break;
+                case "4":
+                    LogExpense();
+                    break;
+                case "5":
+                    View_Reports();
+                    break;
+                case "6":
+                    exit = true;
+                    Console.WriteLine("Goodbye!");
+                    break;
+                default:
+                    Console.WriteLine("Not an option, try again.");
+                    Console.ReadLine();
+                    break;
+            }
+        }
+
+// Placeholder methods to define soon
+    static void LogTask()
+    {
+        Console.WriteLine("\n-- Log a Task --");
+        Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+    }
+
+    static void MarkTaskComplete()
+    {
+        Console.WriteLine("\n-- Mark a Task Complete --");
+        Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+    }
+
+    static void ViewUpcomingTasks()
+    {
+        Console.WriteLine("\n-- View Upcoming Tasks --");
+        Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+    }
+
+    static void LogExpense()
+    {
+        Console.WriteLine("\n-- Log an Expense --");
+        Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+    }
+        static void View_Reports()
+    {
+        Console.WriteLine("\n-- got to reports menu --");
+        Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+    }
     }
 }
