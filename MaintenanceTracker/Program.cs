@@ -1,5 +1,13 @@
 ﻿namespace MaintenanceTracker;
 
+public class MaintenanceTask
+{
+    public int Id { get; set; }
+    public string Description { get; set; }
+    public DateTime DueDate { get; set; }
+    public bool IsCompleted { get; set; } = false;
+}
+
 class Program
 {
     static void Main(string[] args)
@@ -49,6 +57,7 @@ class Program
     static void LogTask()
     {
         Console.WriteLine("\n-- Log a Task --");
+        Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
     }
@@ -56,6 +65,7 @@ class Program
     static void MarkTaskComplete()
     {
         Console.WriteLine("\n-- Mark a Task Complete --");
+        Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
     }
@@ -63,6 +73,7 @@ class Program
     static void ViewUpcomingTasks()
     {
         Console.WriteLine("\n-- View Upcoming Tasks --");
+        Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
     }
@@ -70,12 +81,14 @@ class Program
     static void LogExpense()
     {
         Console.WriteLine("\n-- Log an Expense --");
+        Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
     }
         static void View_Reports()
     {
         Console.WriteLine("\n-- got to reports menu --");
+        Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
     }
