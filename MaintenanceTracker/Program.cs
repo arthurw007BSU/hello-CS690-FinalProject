@@ -1,5 +1,7 @@
 ﻿namespace MaintenanceTracker;
 
+//class for an individual task creation
+//will be removed from the main as i get a handle around this code
 public class MaintenanceTask
 {
     public int Id { get; set; }
@@ -7,9 +9,12 @@ public class MaintenanceTask
     public DateTime DueDate { get; set; }
     public bool IsCompleted { get; set; } = false;
 }
+//need to make a list to holdthe new tasks created
 
 class Program
 {
+    static List<MaintenanceTask> tasks = new List<MaintenanceTask>();
+    static int taskCounter = 1;
     static void Main(string[] args)
     {
         bool exit = false;
@@ -56,10 +61,39 @@ class Program
 // Placeholder methods to define soon
     static void LogTask()
     {
-        Console.WriteLine("\n-- Log a Task --");
+        /*( Console.WriteLine("\n-- Log a Task --");
         Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
+        */
+
+        Console.Clear();
+    Console.WriteLine("-- Log a New Maintenance Task --");
+
+    Console.Write("Enter task description: ");
+    string description = Console.ReadLine();
+
+    Console.Write("Enter due date (yyyy-mm-dd): ");
+    string inputDate = Console.ReadLine();
+
+    DateTime dueDate;
+    while (!DateTime.TryParse(inputDate, out dueDate))
+    {
+        Console.Write("Invalid date. Please enter again (yyyy-mm-dd): ");
+        inputDate = Console.ReadLine();
+    }
+
+    MaintenanceTask newTask = new MaintenanceTask
+    {
+        Id = taskCounter++,
+        Description = description,
+        DueDate = dueDate
+    };
+
+    tasks.Add(newTask);
+    Console.WriteLine("Task logged successfully!");
+    Console.WriteLine("Press Enter to continue...");
+    Console.ReadLine();
     }
 
     static void MarkTaskComplete()
@@ -72,9 +106,26 @@ class Program
 
     static void ViewUpcomingTasks()
     {
+        /*
         Console.WriteLine("\n-- View Upcoming Tasks --");
         Console.WriteLine("\n--NOT IMPLEMENTED YET --");
         Console.WriteLine("Press Enter to return to the main menu.");
+        Console.ReadLine();
+        */
+        Console.Clear();
+        Console.WriteLine("-- Upcoming Maintenance Tasks --");
+
+        if (tasks.Count == 0){
+            Console.WriteLine("No tasks have been logged.");
+        }
+        else{
+            foreach (var task in tasks){
+                string status = task.IsCompleted ? "Completed" : " Pending";
+                Console.WriteLine($"ID: {task.Id} | {task.Description} | Due: {task.DueDate.ToShortDateString()} | {status}");
+            }
+        }   
+
+        Console.WriteLine("\nPress Enter to return to the main menu...");
         Console.ReadLine();
     }
 
