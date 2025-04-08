@@ -9,7 +9,16 @@ public class MaintenanceTask
     public DateTime DueDate { get; set; }
     public bool IsCompleted { get; set; } = false;
 }
-//need to make a list to holdthe new tasks created
+
+//create a class for expense
+//move out of this main file later
+public class Expense
+{
+    public int TaskId { get; set; }
+    public decimal Amount { get; set; }
+    public DateTime Date { get; set; }
+    public string Notes { get; set; }
+}
 
 class Program
 {
