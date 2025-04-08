@@ -4,7 +4,7 @@ This is a C# console app to log and track home maintenance tasks, expenses, and 
 as of 4/7/25 you can log tasks.  Thus far, the tasks are not persistent between sessions of this app yet.
 ## Features
 - Log maintenance tasks
-- Set due dates and mark tasks complete
+- Set due dates
 
 
 ## How to Run
