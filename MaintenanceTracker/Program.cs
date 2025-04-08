@@ -4,6 +4,8 @@
 //will be removed from the main as i get a handle around this code
 public class MaintenanceTask
 {
+    //i hate using get set but im forcing myself to learn this method of setting variables.
+    
     public int Id { get; set; }
     public string Description { get; set; }
     public DateTime DueDate { get; set; }
@@ -12,13 +14,7 @@ public class MaintenanceTask
 
 //create a class for expense
 //move out of this main file later
-public class Expense
-{
-    public int TaskId { get; set; }
-    public decimal Amount { get; set; }
-    public DateTime Date { get; set; }
-    public string Notes { get; set; }
-}
+
 
 class Program
 {
@@ -75,18 +71,17 @@ class Program
         Console.WriteLine("Press Enter to return to the main menu.");
         Console.ReadLine();
         */
-
         Console.Clear();
-    Console.WriteLine("-- Log a New Maintenance Task --");
+        Console.WriteLine("-- Log a New Maintenance Task --");
 
-    Console.Write("Enter task description: ");
-    string description = Console.ReadLine();
+        Console.Write("Enter task description: ");
+        string description = Console.ReadLine();
 
-    Console.Write("Enter due date (yyyy-mm-dd): ");
-    string inputDate = Console.ReadLine();
+        Console.Write("Enter due date (yyyy-mm-dd): ");
+        string inputDate = Console.ReadLine();
 
-    DateTime dueDate;
-    while (!DateTime.TryParse(inputDate, out dueDate))
+        DateTime dueDate;
+        while (!DateTime.TryParse(inputDate, out dueDate))
     {
         Console.Write("Invalid date. Please enter again (yyyy-mm-dd): ");
         inputDate = Console.ReadLine();
