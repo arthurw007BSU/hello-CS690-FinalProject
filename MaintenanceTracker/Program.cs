@@ -3,13 +3,14 @@
 class Program
 {
     //Create class for maintenance tasks to be removed from this main program later
+    /*
     public class MaintenanceTask{
         //set variables for the instance
         public int Id { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
         public bool IsCompleted { get; set; } = false;
-    }
+    }*/
     //create a list of maintenances tasks objects for referencing and later writing to file.
     static List<MaintenanceTask> tasks = new List<MaintenanceTask>();
     //Create a counter to keep up with the number of tasks
@@ -109,6 +110,7 @@ class Program
         Console.ReadLine();
        
     }
+
     //print to screen the list of dates stored in my tasks list
     static void ViewUpcomingTasks(){
         /*
