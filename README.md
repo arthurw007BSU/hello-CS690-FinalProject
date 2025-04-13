@@ -8,10 +8,10 @@ as of 4/7/25 you can log tasks.  Thus far, the tasks are not persistent between 
 
 
 ## How to Run
-1. Clone the repo
-2. Open it in Visual Studio
-3. navigate to 'hello-CS690-FinalProject/MaintenanceTracker' folder
-4. Run the app by typing 'dotnet run' 
+1. download the zip    
+3. Open it in Visual Studio
+4. navigate to 'hello-CS690-FinalProject/MaintenanceTracker' folder
+5. Run the app by typing 'dotnet run' 
 
 ## Future Plans
 - Save/load tasks and expenses to/from a file
