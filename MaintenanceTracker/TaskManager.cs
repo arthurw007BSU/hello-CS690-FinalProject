@@ -4,9 +4,11 @@ namespace MaintenanceTracker
 {
     public static class TaskManager
     {
+        //create a list for storing tasks
         public static List<MaintenanceTask> Tasks = new List<MaintenanceTask>();
         public static int TaskCounter = 1;
 
+        //sort through tasklist if !taskcompleted, print to screen the task
         public static void ViewUpcomingTasks()
         {
             Console.Clear();
@@ -32,7 +34,7 @@ namespace MaintenanceTracker
             Console.WriteLine("\nPress Enter to return to the main menu...");
             Console.ReadLine();
         }
-    
+        //
         public static void LogTask(string taskFilePath)
         {
 
@@ -66,7 +68,6 @@ namespace MaintenanceTracker
 
             //tricky learning date time class.  gave it a shot
             // create a duedate variable to hold the user date input of type datetime.
-            //
             DateTime dueDate;
             //I want to make sure the user gives me a good date in the correct format
             //until the user does, it will coninue to ask
@@ -74,22 +75,8 @@ namespace MaintenanceTracker
                     Console.Write("Invalid date. Please enter again (yyyy-mm-dd): ");
                     taskDate = Console.ReadLine();
             }
-
-            //now that i have a due date, i can create a maintenancetask object to store in my list
-            // MaintenanceTask newTask = new MaintenanceTask();  just took this out //
-            /* Id = taskCounter++,
-                Description = description,
-                DueDate = dueDate
-                };
-            */
-            /*newTask.Id = taskCounter++;
-            newTask.Description = description;
-            newTask.DueDate = dueDate;
-            newTask.IsRecurring = isRecurring;
-            newTask.RecurrenceDays = recurrenceDays;
-            */
             
-            //new stuff here.
+            //after getting all of the information, create teh task object
             var newTask = new MaintenanceTask
             {
 
@@ -100,18 +87,19 @@ namespace MaintenanceTracker
                 RecurrenceDays = recurrenceDays
             };
 
+            //add the task to the tasks list
             TaskManager.Tasks.Add(newTask);
+
+            //save the task to a file for later
             FileManager.SaveToFile(taskFilePath, TaskManager.Tasks);
 
-            //add the new object to my tasks list
-            //tasks.Add(newTask);
-            //SaveTasksToFile();
             Console.WriteLine("Task logged successfully!");
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
 
         }
 
+        //change the iscomplete value to True
         public static void MarkTaskComplete(string taskFilePath)
         {
             Console.Clear();
@@ -153,6 +141,7 @@ namespace MaintenanceTracker
             Console.ReadLine();
         }
 
+        //iterate through the tasklist.  if isrecurring? and less than 7 days from NOW display on screen
         public static void ShowUpcomingRecurringReminders(int daysAhead = 7)
         {
             Console.Clear();
@@ -181,6 +170,8 @@ namespace MaintenanceTracker
             Console.WriteLine("\nPress Enter to return to the main menu.");
             Console.ReadLine();
         }
+
+        //iterate through list, if task due date is less 7 days from now, display on screen.
         public static List<MaintenanceTask> GetUpcomingRecurringTasks(int daysAhead = 7)
         {
             DateTime now = DateTime.Today;

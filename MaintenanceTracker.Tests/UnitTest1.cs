@@ -8,13 +8,14 @@ public class UnitTest1
     [Fact]
     public void Test1()
     {
-
+        //test test :D
     }
 
     [Fact]
-    public void CreateSimpleTask()
+    //see if a task can be created
+    public void MakeTask()
     {
-        // Arrange
+        // setup task
         var task = new MaintenanceTask
         {
             Id = 1,
@@ -31,15 +32,16 @@ public class UnitTest1
     }
 
     [Fact]
-    public void CanCreateExpense()
+    //see if i can create an expense
+    public void MakeExpense()
     {
-        // Arrange
+        // setup expense
         int taskId = 1;
         decimal amount = 150.75m;
         DateTime date = new DateTime(2025, 5, 10);
         string notes = "Paid plumber for sink repair";
 
-        // Act
+        // create the object
         Expense expense = new Expense
         {
             TaskId = taskId,
@@ -55,11 +57,13 @@ public class UnitTest1
         Assert.Equal(notes, expense.Notes);
     }
     [Fact]
+    //test saving to a file
     public void SaveAndLoadExpensesFromFile()
     {
-        // Arrange
+        // setup list to hold expense
         var expenses = new List<Expense>
         {
+            //setup a new expense object
             new Expense
             {
                 TaskId = 1,
@@ -75,7 +79,7 @@ public class UnitTest1
                 Notes = "Gutter cleaning"
             }
         };
-
+        //test file for testing
         string filePath = "test_expenses.json";
 
         // Act: Save to file
@@ -99,6 +103,7 @@ public class UnitTest1
         }
 
         // Cleanup
+        // remove files from testing
         if (File.Exists(filePath))
         {
             File.Delete(filePath);
@@ -106,11 +111,14 @@ public class UnitTest1
     }
 //
     [Fact]
+    //test to save and load task data
     public void SaveAndLoadTasksFromFile()
     {
         // Arrange
+        //create the task list for task objects
         var tasks = new List<MaintenanceTask>
         {
+            //create new objects
             new MaintenanceTask
             {
                 Id = 1,
@@ -134,6 +142,7 @@ public class UnitTest1
         string filePath = "test_tasks.json";
 
         // Act: Save to file
+        //write to file in json format
         string json = JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(filePath, json);
 
@@ -163,11 +172,14 @@ public class UnitTest1
     }
 
     [Fact]
+    //test finding recurring tasks
     public void FindRecurringTasks()
     {
         // Arrange
+        //create a list for tasks objects
         TaskManager.Tasks = new List<MaintenanceTask>
         {
+            //create tasks objects
             new MaintenanceTask
             {
                 Id = 1,
@@ -205,6 +217,7 @@ public class UnitTest1
         };
 
         // Act
+        // check if the task due date is within the 7 days
         var reminders = TaskManager.GetUpcomingRecurringTasks(7);
 
         // Assert

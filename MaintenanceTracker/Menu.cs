@@ -3,6 +3,7 @@ using System;
 
 namespace MaintenanceTracker
 {
+    //created a simple menu class to run the menu logic and clean up the main file
     public static class Menu
     {
         public static void ShowMainMenu()
