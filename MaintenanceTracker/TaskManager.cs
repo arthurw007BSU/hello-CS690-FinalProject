@@ -40,6 +40,7 @@ namespace MaintenanceTracker
 
             Console.Clear();
             //give the new screen a title
+            
             Console.WriteLine("-- Log a New Maintenance Task --");
             //get user input for the task description
             Console.Write("Enter task description: ");

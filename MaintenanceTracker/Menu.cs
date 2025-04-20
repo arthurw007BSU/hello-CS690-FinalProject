@@ -1,5 +1,6 @@
 using System;
 //using MaintenanceTracker;
+using Spectre.Console;
 
 namespace MaintenanceTracker
 {
@@ -12,49 +13,56 @@ namespace MaintenanceTracker
             while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine("=== Home Maintenance Tracker ===");
-                Console.WriteLine("1. Log a Maintenance Task");
-                Console.WriteLine("2. Mark a Task as Complete");
-                Console.WriteLine("3. View Upcoming Tasks");
-                Console.WriteLine("4. Log an Expense");
-                Console.WriteLine("5. View Reminders");
-                Console.WriteLine("6. Quit");
-                Console.Write("Select an option (1-6): ");
+                AnsiConsole.Write(
+                    new FigletText("Home Maintenance Tracker").Centered().Color(Color.Orange1));
 
-                string input = Console.ReadLine();
+                var input = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]Select an option:[/]")
+                    .PageSize(10)
+                    .AddChoices(new[]
+                    {
+                        "🛠️  1. Log a Maintenance Task",
+                        "✅  2. Mark a Task as Complete",
+                        "📅  3. View Upcoming Tasks",
+                        "💰  4. Log an Expense",
+                        "⏰  5. View Reminders",
+                        "🚪  6. Quit"
+                    }));
+
+        
+
+
+
 
                 switch (input)
                 {
-                    case "1":
+                    case "🛠️  1. Log a Maintenance Task":
                         TaskManager.LogTask("tasks.json");
                         break;
 
-                    case "2":
+                    case "✅  2. Mark a Task as Complete":
                         TaskManager.MarkTaskComplete("tasks.json");
                         break;
 
-                    case "3":
+                    case "📅  3. View Upcoming Tasks":
                         TaskManager.ViewUpcomingTasks();
                         break;
 
-                    case "4":
+                    case "💰  4. Log an Expense":
                         ExpenseManager.LogExpense();
                         break;
 
-                    case "5":
+                    case "⏰  5. View Reminders":
                         TaskManager.ShowUpcomingRecurringReminders();
                         break;
 
-                    case "6":
+                    case "🚪  6. Quit":
                         exit = true;
-                        Console.WriteLine("Goodbye!");
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid input. Press Enter to try again.");
-                        Console.ReadLine();
+                        AnsiConsole.MarkupLine("[red]Goodbye![/]");
                         break;
                 }
+
             }
         }
     }
