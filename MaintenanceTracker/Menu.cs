@@ -14,7 +14,7 @@ namespace MaintenanceTracker
             {
                 Console.Clear();
                 AnsiConsole.Write(
-                    new FigletText("Home Maintenance Tracker").Centered().Color(Color.Orange1));
+                    new FigletText("Home Maintenance Tracker").LeftJustified().Color(Color.Orange1));
 
                 var input = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
@@ -22,7 +22,7 @@ namespace MaintenanceTracker
                     .PageSize(10)
                     .AddChoices(new[]
                     {
-                        "🛠️  1. Log a Maintenance Task",
+                        "🛠️   1. Log a Maintenance Task",
                         "✅  2. Mark a Task as Complete",
                         "📅  3. View Upcoming Tasks",
                         "💰  4. Log an Expense",
@@ -37,7 +37,7 @@ namespace MaintenanceTracker
 
                 switch (input)
                 {
-                    case "🛠️  1. Log a Maintenance Task":
+                    case "🛠️   1. Log a Maintenance Task":
                         TaskManager.LogTask("tasks.json");
                         break;
 

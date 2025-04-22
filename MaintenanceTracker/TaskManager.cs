@@ -67,7 +67,6 @@ namespace MaintenanceTracker
 
             //tricky learning date time class.  gave it a shot
             // create a duedate variable to hold the user date input of type datetime.
-            //
             DateTime dueDate;
             //I want to make sure the user gives me a good date in the correct format
             //until the user does, it will coninue to ask
@@ -78,19 +77,6 @@ namespace MaintenanceTracker
 
             //now that i have a due date, i can create a maintenancetask object to store in my list
             // MaintenanceTask newTask = new MaintenanceTask();  just took this out //
-            /* Id = taskCounter++,
-                Description = description,
-                DueDate = dueDate
-                };
-            */
-            /*newTask.Id = taskCounter++;
-            newTask.Description = description;
-            newTask.DueDate = dueDate;
-            newTask.IsRecurring = isRecurring;
-            newTask.RecurrenceDays = recurrenceDays;
-            */
-            
-            //new stuff here.
             var newTask = new MaintenanceTask
             {
 
@@ -105,8 +91,7 @@ namespace MaintenanceTracker
             FileManager.SaveToFile(taskFilePath, TaskManager.Tasks);
 
             //add the new object to my tasks list
-            //tasks.Add(newTask);
-            //SaveTasksToFile();
+
             Console.WriteLine("Task logged successfully!");
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
@@ -157,13 +142,15 @@ namespace MaintenanceTracker
         public static void ShowUpcomingRecurringReminders(int daysAhead = 7)
         {
             Console.Clear();
+
             Console.WriteLine($"-- Recurring Tasks Due in Next {daysAhead} Days --");
 
             DateTime now = DateTime.Today;
             DateTime threshold = now.AddDays(daysAhead);
 
             var upcoming = Tasks
-                .Where(t => t.IsRecurring && !t.IsCompleted && t.DueDate <= threshold)
+                //.Where(t => t.IsRecurring && !t.IsCompleted && t.DueDate >= now && t.DueDate <= threshold)
+                .Where(t => !t.IsCompleted && t.DueDate >= now && t.DueDate <= threshold)
                 .OrderBy(t => t.DueDate)
                 .ToList();
 
@@ -188,10 +175,10 @@ namespace MaintenanceTracker
             DateTime threshold = now.AddDays(daysAhead);
 
             return Tasks
-            .Where(t => t.IsRecurring && !t.IsCompleted && t.DueDate <= threshold)
-            .OrderBy(t => t.DueDate)
-            .ToList();
-        }
+                .Where(t => t.IsRecurring && !t.IsCompleted && t.DueDate >= now && t.DueDate <= threshold)
+                .OrderBy(t => t.DueDate)
+                .ToList();
+                }
 
     }
 }
