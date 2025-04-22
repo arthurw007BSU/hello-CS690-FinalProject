@@ -1,8 +1,15 @@
+// Created by: [Arthur]
+/*
+This class manages all of the helper methods for the expenses tasks. 
+including logging new expenses, and viewing logged expenses.
+It also handles the association of expenses with tasks.
+*/
+
 namespace MaintenanceTracker
 {
     public static class ExpenseManager
     {
-        public static List<Expense> Expenses = new List<Expense>();
+        public static List<Expense> Expenses = new();
 
         public static void LogExpense()
         {
@@ -18,6 +25,7 @@ namespace MaintenanceTracker
             }
 
             Console.WriteLine("Select the task to associate the expense with:");
+
             foreach (var task in TaskManager.Tasks)
             {
                 Console.WriteLine($"ID: {task.Id} | {task.Description}");
@@ -62,5 +70,4 @@ namespace MaintenanceTracker
             Console.ReadLine();
         }
     }
-
 }

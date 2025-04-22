@@ -1,5 +1,9 @@
-using System.Text.Json;
+// Created by: [Arthur]
+/* This class handles saving and loading data to and from JSON files.
+   It provides methods to serialize objects into JSON format for saving,
+*/ 
 using System.IO;
+using System.Text.Json;
 
 namespace MaintenanceTracker
 {
@@ -7,7 +11,8 @@ namespace MaintenanceTracker
     {
         public static void SaveToFile<T>(string filePath, List<T> data)
         {
-            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(filePath, json);
         }
 
