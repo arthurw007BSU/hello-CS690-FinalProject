@@ -11,6 +11,8 @@ namespace MaintenanceTracker
         public static List<MaintenanceTask> Tasks = new();
         public static int TaskCounter = 1;
 
+        //Basically gather information form task list
+        //if ithis within the date range, display it to the screen
         public static void ViewUpcomingTasks()
         {
             Console.Clear();
@@ -37,6 +39,8 @@ namespace MaintenanceTracker
             Console.ReadLine();
         }
 
+        //Gather information from the user to create a new task object
+        //to be added to the task list.
         public static void LogTask(string taskFilePath)
         {
             Console.Clear();
@@ -88,7 +92,7 @@ namespace MaintenanceTracker
             Console.WriteLine("Press Enter to continue...");
             Console.ReadLine();
         }
-
+        //change the value of the iscomleted field of the task object to true
         public static void MarkTaskComplete(string taskFilePath)
         {
             Console.Clear();
@@ -126,7 +130,9 @@ namespace MaintenanceTracker
             Console.WriteLine("Press Enter to return to the main menu.");
             Console.ReadLine();
         }
-
+        //this method will show the user all of the tasks that are due in the next 7 days
+        //and are not completed. It will also show the user the date of the task.
+        //if there are no tasks due, it will inform the user of that.   
         public static void ShowUpcomingRecurringReminders(int daysAhead = 7)
         {
             Console.Clear();
@@ -155,7 +161,7 @@ namespace MaintenanceTracker
             Console.WriteLine("\nPress Enter to return to the main menu.");
             Console.ReadLine();
         }
-
+        //this method will return a list of all the tasks that are due in the next 7 days        
         public static List<MaintenanceTask> GetUpcomingRecurringTasks(int daysAhead = 7)
         {
             DateTime now = DateTime.Today;

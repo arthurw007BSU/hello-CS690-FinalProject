@@ -10,7 +10,8 @@ namespace MaintenanceTracker
     public static class ExpenseManager
     {
         public static List<Expense> Expenses = new();
-
+        // gather information from the user to create a new expense object
+        // to be added to the expense list.
         public static void LogExpense()
         {
             Console.Clear();

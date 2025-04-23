@@ -9,13 +9,15 @@ namespace MaintenanceTracker
 {
     public static class FileManager
     {
+        // Save a list of objects to a JSON file
         public static void SaveToFile<T>(string filePath, List<T> data)
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             string json = JsonSerializer.Serialize(data, options);
             File.WriteAllText(filePath, json);
         }
-
+        
+        // Load a list of objects from a JSON file
         public static List<T> LoadFromFile<T>(string filePath)
         {
             if (File.Exists(filePath))
