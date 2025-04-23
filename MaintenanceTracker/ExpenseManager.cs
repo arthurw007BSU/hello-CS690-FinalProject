@@ -4,6 +4,7 @@ This class manages all of the helper methods for the expenses tasks.
 including logging new expenses, and viewing logged expenses.
 It also handles the association of expenses with tasks.
 */
+ using Spectre.Console;
 
 namespace MaintenanceTracker
 {
@@ -15,45 +16,70 @@ namespace MaintenanceTracker
         public static void LogExpense()
         {
             Console.Clear();
-            Console.WriteLine("-- Log an Expense --");
+            AnsiConsole.MarkupLine("[bold yellow]-- Log an Expense --[/]");
 
             if (TaskManager.Tasks.Count == 0)
             {
-                Console.WriteLine("There are no tasks to log this expense to.");
-                Console.WriteLine("Press Enter to return to the main menu.");
+                AnsiConsole.MarkupLine("[red]There are no tasks to log this expense to.[/]");
+                AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu.");
                 Console.ReadLine();
                 return;
             }
 
-            Console.WriteLine("Select the task to associate the expense with:");
-
+            AnsiConsole.MarkupLine("Select the task to associate the expense with:");
             foreach (var task in TaskManager.Tasks)
             {
                 Console.WriteLine($"ID: {task.Id} | {task.Description}");
             }
 
-            Console.Write("Enter the task ID: ");
-            string input = Console.ReadLine();
             int taskId;
-
-            while (!int.TryParse(input, out taskId) || !TaskManager.Tasks.Any(t => t.Id == taskId))
+            while (true)
             {
-                Console.Write("Invalid task ID. Try again: ");
-                input = Console.ReadLine();
+                AnsiConsole.Markup("Enter the [yellow]task ID[/] (or type [green]'q'[/] to cancel): ");
+                string input = Console.ReadLine()?.Trim().ToLower();
+
+                if (input == "q")
+                {
+                    AnsiConsole.MarkupLine("Returning to the [green]main menu[/]...");
+                    Console.ReadLine();
+                    return;
+                }
+
+                if (int.TryParse(input, out taskId) && TaskManager.Tasks.Any(t => t.Id == taskId))
+                {
+                    break;
+                }
+
+                AnsiConsole.MarkupLine("[red]Invalid task ID. Try again or type 'q' to cancel.[/]");
             }
 
-            Console.Write("Enter expense amount (e.g., 125.50): ");
-            string amountInput = Console.ReadLine();
             decimal amount;
-
-            while (!decimal.TryParse(amountInput, out amount))
+            while (true)
             {
-                Console.Write("Invalid amount. Try again: ");
-                amountInput = Console.ReadLine();
+                AnsiConsole.Markup("Enter [yellow]expense amount[/] (e.g., 125.50) or type [green]'q'[/] to cancel: ");
+                string amountInput = Console.ReadLine()?.Trim().ToLower();
+
+                if (amountInput == "q")
+                {
+                    AnsiConsole.MarkupLine("Returning to the [green]main menu[/]...");
+                    Console.ReadLine();
+                    return;
+                }
+
+                if (decimal.TryParse(amountInput, out amount) && amount > 0)
+                {
+                    break;
+                }
+
+                AnsiConsole.MarkupLine("[red]Invalid amount. Please enter a positive number.[/]");
             }
 
-            Console.Write("Enter a note for this expense: ");
-            string notes = Console.ReadLine();
+            AnsiConsole.Markup("Enter a [yellow]note[/] for this expense (or leave blank, press Enter): ");
+            string notes = Console.ReadLine()?.Trim();
+            if (string.IsNullOrWhiteSpace(notes))
+            {
+                notes = "(no notes)";
+            }
 
             var newExpense = new Expense
             {
@@ -66,8 +92,8 @@ namespace MaintenanceTracker
             Expenses.Add(newExpense);
             FileManager.SaveToFile("expenses.json", Expenses);
 
-            Console.WriteLine("Expense logged successfully!");
-            Console.WriteLine("Press Enter to return to the main menu.");
+            AnsiConsole.MarkupLine("[green]Expense logged successfully![/]");
+            AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu.");
             Console.ReadLine();
         }
     }

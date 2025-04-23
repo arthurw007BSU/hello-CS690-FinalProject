@@ -4,6 +4,8 @@ This class manages all of the helper methods for the maintenance tasks.
 including viewing upcoming tasks, logging new tasks, marking tasks as complete, and showing upcoming recurring reminders.
 */
 
+using Spectre.Console;
+
 namespace MaintenanceTracker
 {
     public static class TaskManager
@@ -15,28 +17,33 @@ namespace MaintenanceTracker
         //if ithis within the date range, display it to the screen
         public static void ViewUpcomingTasks()
         {
+            // Display upcoming tasks that are not completed
+            // and are due today or later
             Console.Clear();
             Console.WriteLine("-- Upcoming Maintenance Tasks --");
 
-            if (Tasks.Count == 0)
+            // Filter for upcoming and incomplete tasks
+            var upcomingTasks = Tasks
+                .Where(t => !t.IsCompleted && t.DueDate >= DateTime.Today)
+                .OrderBy(t => t.DueDate)
+                .ToList();
+
+            if (upcomingTasks.Count == 0)
             {
-                Console.WriteLine("No tasks have been logged.");
+                Console.WriteLine("No upcoming tasks.");
             }
             else
             {
-                var sortedTasks = Tasks.OrderBy(t => t.DueDate).ToList();
-
-                foreach (var task in sortedTasks)
+                foreach (var task in upcomingTasks)
                 {
-                    string status = task.IsCompleted ? "Completed" : "Pending";
                     string recurrence = task.IsRecurring ? $" (Repeats every {task.RecurrenceDays} days)" : "";
-
-                    Console.WriteLine($"ID: {task.Id} | {task.Description} | Due: {task.DueDate.ToShortDateString()} | {status}{recurrence}");
+                    Console.WriteLine($"ID: {task.Id} | {task.Description} | Due: {task.DueDate.ToShortDateString()}{recurrence}");
                 }
             }
 
-            Console.WriteLine("\nPress Enter to return to the main menu...");
+            AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
             Console.ReadLine();
+
         }
 
         //Gather information from the user to create a new task object
@@ -46,12 +53,22 @@ namespace MaintenanceTracker
             Console.Clear();
             Console.WriteLine("-- Log a New Maintenance Task --");
 
-            Console.Write("Enter task description: ");
-            string description = Console.ReadLine();
+            // Require non-empty description
+            string description;
+            do
+            {
+                Console.Write("Enter task description: ");
+                description = Console.ReadLine()?.Trim();
 
-            Console.Write("Enter due date (yyyy-mm-dd): ");
-            string taskDate = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(description))
+                {
+                    AnsiConsole.MarkupLine("[red]Description cannot be empty. Please enter a valid task description.[/]");
+                    AnsiConsole.MarkupLine("[yellow]Example: Change air filter, clean gutters, service HVAC[/]");
+                }
 
+            } while (string.IsNullOrWhiteSpace(description));
+
+            // Ask if the task is recurring
             Console.Write("Is this a recurring task? (y/n): ");
             string recurringInput = Console.ReadLine()?.ToLower();
             bool isRecurring = recurringInput == "y";
@@ -64,18 +81,37 @@ namespace MaintenanceTracker
 
                 while (!int.TryParse(daysInput, out recurrenceDays) || recurrenceDays <= 0)
                 {
-                    Console.Write("Invalid number. Please enter a positive number of days: ");
+                    AnsiConsole.Markup("[red]Invalid number.[/] [white]Please enter a[/] [yellow]positive number of days[/]: ");
                     daysInput = Console.ReadLine();
                 }
             }
 
-            DateTime dueDate;
-            while (!DateTime.TryParse(taskDate, out dueDate))
+            // Require valid and non-past due date
+            //DateTime dueDate;
+            DateTime dueDate = DateTime.MinValue;
+            bool isValidDate = false;
+
+            while (!isValidDate)
             {
-                Console.Write("Invalid date. Please enter again (yyyy-mm-dd): ");
-                taskDate = Console.ReadLine();
+                Console.Write("Enter due date (yyyy-mm-dd): ");
+                string taskDate = Console.ReadLine();
+
+                if (!DateTime.TryParse(taskDate, out dueDate))
+                {
+                    AnsiConsole.MarkupLine("[red]Invalid date format. Please use yyyy-mm-dd.[/]");
+                    continue;
+                }
+
+                if (dueDate < DateTime.Today)
+                {
+                    AnsiConsole.MarkupLine("[red]Due date cannot be in the past. Please enter a future date.[/]");
+                    continue;
+                }
+
+                isValidDate = true;
             }
 
+            // Create and save the task
             var newTask = new MaintenanceTask
             {
                 Id = TaskCounter++,
@@ -88,8 +124,8 @@ namespace MaintenanceTracker
             Tasks.Add(newTask);
             FileManager.SaveToFile(taskFilePath, Tasks);
 
-            Console.WriteLine("Task logged successfully!");
-            Console.WriteLine("Press Enter to continue...");
+            AnsiConsole.MarkupLine("[green]Task logged successfully![/]");
+            AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
             Console.ReadLine();
         }
         //change the value of the iscomleted field of the task object to true
@@ -98,27 +134,49 @@ namespace MaintenanceTracker
             Console.Clear();
             Console.WriteLine("-- Mark Task as Complete --");
 
-            if (Tasks.Count == 0)
+            var pendingTasks = Tasks
+                .Where(t => !t.IsCompleted)
+                .OrderBy(t => t.DueDate)
+                .ToList();
+
+            if (pendingTasks.Count == 0)
             {
-                Console.WriteLine("No tasks available.");
-                Console.WriteLine("Press Enter to return to the main menu.");
+                Console.WriteLine("No pending tasks available.");
+                AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
                 Console.ReadLine();
+
                 return;
             }
 
-            foreach (var task in Tasks.Where(t => !t.IsCompleted))
+            // Display pending tasks
+            foreach (var task in pendingTasks)
             {
                 Console.WriteLine($"ID: {task.Id} | {task.Description} | Due: {task.DueDate.ToShortDateString()} | Pending");
             }
 
-            Console.Write("Enter the ID of the task to mark as complete: ");
-            string input = Console.ReadLine();
-            int taskId;
+            Console.Write("Enter the ID of the task to mark as complete (or type 'q' to cancel): ");
+            string input = Console.ReadLine()?.Trim().ToLower();
 
-            while (!int.TryParse(input, out taskId) || !Tasks.Any(t => t.Id == taskId))
+            if (input == "q")
             {
-                Console.Write("Invalid ID. Try again: ");
-                input = Console.ReadLine();
+                AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
+                Console.ReadLine();
+                return;
+            }
+
+            int taskId;
+            while (!int.TryParse(input, out taskId) || !pendingTasks.Any(t => t.Id == taskId))
+            {
+                AnsiConsole.Markup("[red]Invalid ID[/] [white]– Try again or type[/] [yellow]'q'[/] [white]to cancel: [/]");
+
+                input = Console.ReadLine()?.Trim().ToLower();
+                
+                if (input == "q")
+                {
+                    AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
+                    Console.ReadLine();
+                    return;
+                }
             }
 
             var selectedTask = Tasks.First(t => t.Id == taskId);
@@ -127,8 +185,9 @@ namespace MaintenanceTracker
             FileManager.SaveToFile(taskFilePath, Tasks);
 
             Console.WriteLine("Task marked as complete!");
-            Console.WriteLine("Press Enter to return to the main menu.");
+            AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
             Console.ReadLine();
+
         }
         //this method will show the user all of the tasks that are due in the next 7 days
         //and are not completed. It will also show the user the date of the task.
@@ -149,6 +208,7 @@ namespace MaintenanceTracker
             if (upcoming.Count == 0)
             {
                 Console.WriteLine("No recurring tasks are due soon.");
+                AnsiConsole.MarkupLine("Press [green]Enter[/] to return to the main menu");
             }
             else
             {
@@ -158,7 +218,6 @@ namespace MaintenanceTracker
                 }
             }
 
-            Console.WriteLine("\nPress Enter to return to the main menu.");
             Console.ReadLine();
         }
         //this method will return a list of all the tasks that are due in the next 7 days        
